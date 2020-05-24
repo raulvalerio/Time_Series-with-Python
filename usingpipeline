@@ -1,0 +1,45 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import confusion_matrix
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import GradientBoostingClassifier
+
+train = pd.read_csv('C:/Users/isach/Documents/Kaggle Competitions/Titanic ML/train.csv')
+train= train.set_index('PassengerId')
+test = pd.read_csv('C:/Users/isach/Documents/Kaggle Competitions/Titanic ML/test.csv')
+test= test.set_index('PassengerId')
+
+Title_Dictionary = {
+    "Capt": "Officer",
+    "Col": "Officer",
+    "Major": "Officer",
+    "Jonkheer": "Royalty",
+    "Don": "Royalty",
+    "Sir" : "Royalty",
+    "Dr": "Officer",
+    "Rev": "Officer",
+    "the Countess":"Royalty",
+    "Mme": "Mrs",
+    "Mlle": "Miss",
+    "Ms": "Mrs",
+    "Mr" : "Mr",
+    "Mrs" : "Mrs",
+    "Miss" : "Miss",
+    "Master" : "Master",
+    "Lady" : "Royalty"
+}
+
+def get_titles(combined):
+    # we extract the title from each name
+    combined['Title'] = combined['Name'].map(lambda name:name.split(',')[1].split('.')[0].strip())
+    
+    # a map of more aggregated title
+    # we map each title
+    combined['Title'] = combined.Title.map(Title_Dictionary)
+    #status('Title')
+    return combined
+    
+train= get_titles(train)
+test = get_titles(test)
